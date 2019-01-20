@@ -1,0 +1,1 @@
+Programming assignments for AI
