@@ -99,9 +99,20 @@ class robot(object):
 
     def suck(self, env, murphy=False):
         sq = env[self.location]
-        if sq.state == 'dirty':
-            sq.clean()
-            self._logger.debug("Square cleaned")
+        if not murphy:
+            if sq.state == 'dirty':
+                sq.clean()
+                self._logger.debug("Square cleaned")
+                return True
+            else:
+                self._logger.debug("Square already clean")
+                return False
+        else:
+            murpNum = random.randint(0, 3)
+            if murpNum == 2:
+                sq.dirty()
+            else:
+                sq.clean()
             return True
         self._logger.debug("Square already clean")
         return False
@@ -120,11 +131,11 @@ class robot(object):
         dirtSensorNum = random.randint(0, 9)
         isClean = self.checkEnv(env)
         if dirtSensorNum == 1:
-            # dirt sensor went wrong
+        # dirt sensor went wrong
             isClean = not isClean
 
         if isClean:
-            self.suck()
+            self.suck(env, True)
         else:
             self.moveAction()
 
@@ -142,7 +153,7 @@ class robot(object):
     def action(self, env):
         self.performanceMeasure = self.performanceMeasure + 1
         if self.checkEnv(env):
-            self.actuatorAction(env)
+            self.suck(env)
         else:
             self.moveAction()
 
@@ -162,6 +173,27 @@ class robot(object):
         elif action == 'nothing':
             self.doNothing()
 
+    def murphyRandomAction(self, env):
+        self.performanceMeasure = self.performanceMeasure + 1
+        action = robot.randomActionMap[random.randint(0, 5)]
+        if action == 'up':
+            self.moveUp()
+        elif action == 'down':
+            self.moveDown()
+        elif action == 'left':
+            self.moveLeft()
+        elif action =='right':
+            self.moveRight()
+        elif action == 'suck':
+            dirtSensorNum = random.randint(0, 9)
+            isClean = self.checkEnv(env)
+            if dirtSensorNum == 1:
+                isClean = not isClean
+            if isClean:
+                self.suck(env, True)
+        elif action == 'nothing':
+            self.doNothing()
+
 def isWorldClean(env):
     for sq in env:
         if sq.state == 'dirty':
@@ -173,7 +205,7 @@ def runReflexAgent():
         buf = list()
         for i in range(0, 99):
             world = vaccumWorld(num)
-            robot1 = robot(0)
+            robot1 = robot(0, True)
             while not isWorldClean(world.grid):
                 robot1.action(world.grid)
             buf.append(robot1.performanceMeasure)
@@ -193,12 +225,32 @@ def runRandomAgent():
                 b=num))
 
 def runReflexMurphy():
-    world = vaccumWorld(0)
-    robot1 = robot(0)
-    robot1.murphyReflexAction(world.grid)
+    for num in [1, 3, 5]:
+        buf = list()
+        for i in range(0, 99):
+            world = vaccumWorld(num)
+            robot1 = robot(0, True)
+            while not isWorldClean(world.grid):
+                robot1.murphyReflexAction(world.grid)
+            buf.append(robot1.performanceMeasure)
+        print("Murphy Reflex Robots performance: {a} in world with {b} dirt piles".format(a=mean(buf),
+                b=num))
+
+def runRandomMurphy():
+    for num in [1, 3, 5]:
+        buf = list()
+        for i in range(0, 99):
+            world = vaccumWorld(num)
+            robot1 = robot(0, True)
+            while not isWorldClean(world.grid):
+                robot1.murphyRandomAction(world.grid)
+            buf.append(robot1.performanceMeasure)
+        print("Murphy Random Robots performance: {a} in world with {b} dirt piles".format(a=mean(buf),
+                b=num))
+
 
 if __name__ == '__main__':
-    #runReflexAgent()
-    #runRandomAgent()
-    for i in range(0, 10):
-        runReflexMurphy()
+     runReflexAgent()
+     runRandomAgent()
+     runReflexMurphy()
+     runRandomMurphy()
