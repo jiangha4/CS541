@@ -1,35 +1,16 @@
-class Square(object):
-    def __init__(self, id):
-        self.id = id
-
-    def __gt__(self, other):
-        if int(self.id) == -1:
-            return False
-        if int(other.id) == -1:
-            return False
-        return int(self.id) > int(other.id)
-
-    def __repr__(self):
-        if self.id == '-1':
-            return '[b]'
-        return '[' + self.id + ']'
-
 class Grid(object):
+    leftEdge = [2, 5, 8]
+    rightEdge = [0, 3, 6]
+    topEdge = [0, 1, 2]
+    botEdge = [6, 7, 8]
+
+    actionEncoding = {'0': 'right', '1': 'left', '2': 'up', '3':'down'}
+
     def __init__(self, size, numlist):
-        self.numList = numlist
-        self.grid = self.create_grid()
+        self.grid = numlist
         self.size = size
         self.length = len(self.grid)
         self.parity = self.parity()
-
-    def create_grid(self):
-        grid = list()
-        for elem in self.numList:
-            if elem == 'b':
-                grid.append(Square('-1'))
-            else:
-                grid.append(Square(elem))
-        return grid
 
     def parity(self):
         parity = 0
@@ -39,6 +20,30 @@ class Grid(object):
                 if cur > self.grid[j]:
                     parity = parity + 1
         return parity
+
+    def actions(self):
+        buf = None
+        blank_index = self.grid.index('b')
+        if blank_index in Grid.leftEdge:
+            pass
+        elif blank_index in Grid.rightEdge:
+            pass
+        elif blank_index in Grid.topEdge:
+            pass
+        elif blank_index in Grid.botEdge:
+            pass
+
+    def left(self):
+        pass
+
+    def up(self):
+        pass
+
+    def right(self):
+        pass
+
+    def down(self):
+        pass
 
     def __repr__(self):
         rep = ''

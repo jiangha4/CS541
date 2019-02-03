@@ -1,24 +1,17 @@
 from grid import Grid
+from node import Node, MyHeapQueue
+from helper import *
 import argparse
 
-class Node(object):
-    def __init__(self):
-        self.state = None
-        self.parent = None
-        self.action = None
-        self.path_cost = None
+goal_grid = Grid(3, ['1', '2', '3', '4', '5', '6', '7', '8', 'b'])
 
 
-class SearchTree(object):
-    def __init__(self):
-        pass
-
-
-def best_first_search(start_state):
-    print(start_state.parity)
-
-def a_star_search():
-    pass
+def best_first_search(start_node):
+    queue = MyHeapQueue()
+    queue.push(start_node)
+    while not queue.isEmpty():
+        curr = queue.pop()
+        print(curr.state)
 
 
 def argument_parser():
@@ -28,9 +21,18 @@ def argument_parser():
     return parser.parse_args()
 
 
-if __name__ == '__main__':
+def main():
     arg = argument_parser()
-    start_state = Grid(3, list(arg.init))
-    print(start_state)
-    best_first_search(start_state)
+    starter_grid = Grid(3, list(arg.init))
+    if check_parity(starter_grid, goal_grid):
+        heur = misplaced_square_heuristic(starter_grid, goal_grid)
+        starter_node = Node(starter_grid, None, None, heur)
+        best_first_search(starter_node)
+    else:
+        print("Input parity is different from goal parity. Cannot solve.")
+
+
+if __name__ == '__main__':
+    main()
+
 
