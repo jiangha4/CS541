@@ -21,7 +21,7 @@ class grid(object):
     def __repr__(self):
         rep = ''
         counter = 0
-        for i in xrange(0, len(self.grid)):
+        for i in range(0, len(self.grid)):
             counter = counter + 1
             rep = rep + str(self.grid[i])
             if counter%self.size == 0:
