@@ -11,7 +11,7 @@ def best_first_search(start_node):
     queue.push(start_node)
     while not queue.isEmpty():
         curr = queue.pop()
-        print(curr.state)
+        print(curr.action)
 
 
 def argument_parser():
@@ -25,10 +25,9 @@ def main():
     arg = argument_parser()
     starter_grid = Grid(3, list(arg.init))
     if check_parity(starter_grid, goal_grid):
-        #heur = misplaced_square_heuristic(starter_grid, goal_grid)
+        heur = misplaced_square_heuristic(starter_grid, goal_grid)
         #heur = manhattan_distance_heuristic(starter_grid, goal_grid)
-        heur = euclidean_distance_heuristic(starter_grid, goal_grid)
-        print(heur)
+        #heur = euclidean_distance_heuristic(starter_grid, goal_grid)
         starter_node = Node(starter_grid, None, None, heur)
         best_first_search(starter_node)
     else:

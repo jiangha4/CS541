@@ -1,10 +1,8 @@
-class Grid(object):
-    leftEdge = [2, 5, 8]
-    rightEdge = [0, 3, 6]
-    topEdge = [0, 1, 2]
-    botEdge = [6, 7, 8]
+import copy
 
-    actionEncoding = {'0': 'right', '1': 'left', '2': 'up', '3':'down'}
+class Grid(object):
+    leftEdge = [0, 3, 6]
+    rightEdge = [2, 5, 8]
 
     def __init__(self, size, numlist):
         self.grid = numlist
@@ -22,28 +20,50 @@ class Grid(object):
         return parity
 
     def actions(self):
-        buf = None
         blank_index = self.grid.index('b')
-        if blank_index in Grid.leftEdge:
-            pass
-        elif blank_index in Grid.rightEdge:
-            pass
-        elif blank_index in Grid.topEdge:
-            pass
-        elif blank_index in Grid.botEdge:
-            pass
+        successor = []
+        if blank_index < 6:
+            nextState = copy.deepcopy(self.grid)
+            self.down(blank_index, nextState)
+            successor.append(nextState)
 
-    def left(self):
-        pass
+        if blank_index > 3:
+            nextState = copy.deepcopy(self.grid)
+            self.up(blank_index, nextState)
+            successor.append(nextState)
 
-    def up(self):
-        pass
+        if blank_index not in Grid.rightEdge:
+            nextState = copy.deepcopy(self.grid)
+            self.right(blank_index, nextState)
+            successor.append(nextState)
 
-    def right(self):
-        pass
+        if blank_index not in Grid.leftEdge:
+            nextState = copy.deepcopy(self.grid)
+            self.left(blank_index, nextState)
+            successor.append(nextState)
 
-    def down(self):
-        pass
+        return successor
+
+    def left(self, index, state):
+        newIndex = index - 1
+        self._swap(index, newIndex, state)
+
+    def up(self, index, state):
+        newIndex = index - self.size
+        self._swap(index, newIndex, state)
+
+    def right(self, index, state):
+        newIndex = index + 1
+        self._swap(index, newIndex, state)
+
+    def down(self, index, state):
+        newIndex = index + self.size
+        self._swap(index, newIndex, state)
+
+    def _swap(self, x, y, layout):
+        tmp = layout[x]
+        layout[x] = layout[y]
+        layout[y] = tmp
 
     def __repr__(self):
         rep = ''
@@ -58,6 +78,6 @@ class Grid(object):
 
 if __name__ == '__main__':
     testList = ['1', '2', '3', '4', '5', '6', '7', '8', 'b']
-    a = grid(3, testList)
+    a = Grid(3, testList)
     print(a)
 
