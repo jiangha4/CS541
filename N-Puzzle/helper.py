@@ -1,5 +1,10 @@
 import math
 
+def check_goal(grid1, grid2):
+    if grid1.grid == grid2.grid:
+        return True
+    return False
+
 def check_parity(grid1, grid2):
     if (grid1.parity%2) == (grid2.parity%2):
         print("Parity is the same")
@@ -7,6 +12,10 @@ def check_parity(grid1, grid2):
     print("Parity is different")
     return False
 
+def backtrack(node):
+    while node != None:
+        print(node)
+        node = node.parent
 
 def misplaced_square_heuristic(current, goal):
     num = 0

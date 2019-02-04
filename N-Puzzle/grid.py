@@ -14,6 +14,8 @@ class Grid(object):
         parity = 0
         for i in range(0, self.length):
             cur = self.grid[i]
+            if cur == 'b':
+                continue
             for j in range(i+1, self.length):
                 if cur > self.grid[j]:
                     parity = parity + 1
@@ -45,20 +47,20 @@ class Grid(object):
         return successor
 
     def left(self, index, state):
-        newIndex = index - 1
-        self._swap(index, newIndex, state)
+        new_index = index - 1
+        self._swap(index, new_index, state)
 
     def up(self, index, state):
-        newIndex = index - self.size
-        self._swap(index, newIndex, state)
+        new_index = index - self.size
+        self._swap(index, new_index, state)
 
     def right(self, index, state):
-        newIndex = index + 1
-        self._swap(index, newIndex, state)
+        new_index = index + 1
+        self._swap(index, new_index, state)
 
     def down(self, index, state):
-        newIndex = index + self.size
-        self._swap(index, newIndex, state)
+        new_index = index + self.size
+        self._swap(index, new_index, state)
 
     def _swap(self, x, y, layout):
         tmp = layout[x]
