@@ -1,10 +1,12 @@
-from helpers.grid import Grid
+from helpers.grid import three_Grid, four_Grid
 from helpers.node import Node
 from helpers.myheapq import MyHeapQueue
 import math
 
-goal_grid = Grid(3, ['1', '2', '3', '8', 'b', '4', '7', '6', '5'])
-
+goal_grid = three_Grid(['1', '2', '3', '8', 'b', '4', '7', '6', '5'])
+goal_four_grid = four_Grid('1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,b'.split(','))
+print(goal_grid.grid)
+print(goal_four_grid.grid)
 
 def check_goal(grid1, grid2):
     if grid1.grid == grid2.grid:
@@ -80,7 +82,7 @@ def euclidean_distance_heuristic(current, goal):
 
 def generate_successors(node, queue, heur_function, astar=False):
     for state in node.action:
-        newGrid = Grid(3, state)
+        newGrid = three_Grid(state)
         depth = node.depth + 1
         if astar:
             heur = heur_function(newGrid, goal_grid) + depth

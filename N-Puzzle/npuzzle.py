@@ -14,6 +14,8 @@ def argument_parser():
                         help='Use euclidean distance heuristic')
     parser.add_argument('-c', '--cycles', type=int, action='store', required=True,
                         help='Number of cycles')
+    parser.add_argument('-f', '--four', action='store_true',
+                        help="Solve 15-Puzzle")
     return parser.parse_args()
 
 def search_function(starter_grid, heur_function):
@@ -30,24 +32,39 @@ def search_function(starter_grid, heur_function):
 
 def main():
     arg = argument_parser()
-    starter_grid = Grid(3, list(arg.init))
+    starter_grid = three_Grid(list(arg.init))
     if check_parity(starter_grid, goal_grid):
         goal_average_best_first = []
         goal_average_a_star = []
         for i in range(0, arg.cycles):
             print("Trial {}".format(i))
-            if arg.miss:
-                best_first_steps, a_star_steps = search_function(starter_grid, misplaced_square_heuristic)
-                goal_average_best_first.append(best_first_steps)
-                goal_average_a_star.append(a_star_steps)
-            elif arg.man:
-                best_first_steps, a_star_steps = search_function(starter_grid, manhattan_distance_heuristic)
-                goal_average_best_first.append(best_first_steps)
-                goal_average_a_star.append(a_star_steps)
-            elif arg.eucl:
-                best_first_steps, a_star_steps = search_function(starter_grid, euclidean_distance_heuristic)
-                goal_average_best_first.append(best_first_steps)
-                goal_average_a_star.append(a_star_steps)
+            if not arg.four:
+                if arg.miss:
+                        best_first_steps, a_star_steps = search_function(starter_grid, misplaced_square_heuristic)
+                        goal_average_best_first.append(best_first_steps)
+                        goal_average_a_star.append(a_star_steps)
+                elif arg.man:
+                        best_first_steps, a_star_steps = search_function(starter_grid, manhattan_distance_heuristic)
+                        goal_average_best_first.append(best_first_steps)
+                        goal_average_a_star.append(a_star_steps)
+                elif arg.eucl:
+                    best_first_steps, a_star_steps = search_function(starter_grid, euclidean_distance_heuristic)
+                    goal_average_best_first.append(best_first_steps)
+                    goal_average_a_star.append(a_star_steps)
+            else:
+                # todo write a way to get get strings from input from args.
+                if arg.miss:
+                        best_first_steps, a_star_steps = search_function(starter_grid, misplaced_square_heuristic)
+                        goal_average_best_first.append(best_first_steps)
+                        goal_average_a_star.append(a_star_steps)
+                elif arg.man:
+                        best_first_steps, a_star_steps = search_function(starter_grid, manhattan_distance_heuristic)
+                        goal_average_best_first.append(best_first_steps)
+                        goal_average_a_star.append(a_star_steps)
+                elif arg.eucl:
+                    best_first_steps, a_star_steps = search_function(starter_grid, euclidean_distance_heuristic)
+                    goal_average_best_first.append(best_first_steps)
+                    goal_average_a_star.append(a_star_steps)
         print("Average steps for best first search: {}".format(sum(goal_average_best_first)/arg.cycles))
         print("Average steps for a star search: {}".format(sum(goal_average_a_star)/arg.cycles))
 
