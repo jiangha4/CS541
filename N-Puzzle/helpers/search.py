@@ -1,6 +1,6 @@
-from grid import Grid
-from node import Node
-from myheapq import MyHeapQueue
+from helpers.grid import Grid
+from helpers.node import Node
+from helpers.myheapq import MyHeapQueue
 import math
 
 goal_grid = Grid(3, ['1', '2', '3', '8', 'b', '4', '7', '6', '5'])

@@ -1,5 +1,5 @@
 import argparse
-from search import *
+from helpers.search import *
 
 
 def argument_parser():
