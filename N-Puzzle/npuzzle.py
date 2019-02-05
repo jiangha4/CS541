@@ -14,7 +14,7 @@ def argument_parser():
                         help='Use euclidean distance heuristic')
     parser.add_argument('-c', '--cycles', type=int, action='store', required=True,
                         help='Number of cycles')
-    parser.add_argument('-f', '--four', action='store_true',
+    parser.add_argument('-f', '--four', type=str, action='store',
                         help="Solve 15-Puzzle")
     return parser.parse_args()
 
