@@ -67,14 +67,14 @@ class Grid(object):
         layout[x] = layout[y]
         layout[y] = tmp
 
+    def __eq__(self, other):
+        return self.grid == other.grid
+
     def __repr__(self):
-        rep = ''
-        counter = 0
-        for i in range(0, self.length):
-            counter = counter + 1
-            rep = rep + str(self.grid[i])
-            if counter%self.size == 0:
-                rep = rep + '\n'
+        rep = '('
+        for sq in self.grid:
+            rep = rep + sq
+        rep = rep + ')'
         return rep
 
 
