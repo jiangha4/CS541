@@ -98,7 +98,7 @@ def generate_successors(node, queue, heur_function, goal_grid, astar=False):
             heur = heur_function(newGrid, goal_grid) + depth
         else:
             heur = heur_function(newGrid, goal_grid)
-        newNode = Node(newGrid, node, heur, depth)
+        newNode = Node(newGrid, node, int(heur), depth)
         if check_goal(newGrid, goal_grid):
             return newNode
         queue.push(newNode)
@@ -107,7 +107,7 @@ def generate_successors(node, queue, heur_function, goal_grid, astar=False):
 
 def best_first_search(start_grid, heur_function, goal_grid):
     heur = heur_function(start_grid, goal_grid)
-    starter_node = Node(start_grid, None, heur, 0)
+    starter_node = Node(start_grid, None, int(heur), 0)
     queue = MyHeapQueue()
     queue.push(starter_node)
     while not queue.isEmpty():
@@ -120,7 +120,7 @@ def best_first_search(start_grid, heur_function, goal_grid):
 
 def a_star_search(start_grid, heur_function, goal_grid):
     heur = heur_function(start_grid, goal_grid)
-    starter_node = Node(start_grid, None, heur, 0)
+    starter_node = Node(start_grid, None, int(heur), 0)
     queue = MyHeapQueue()
     queue.push(starter_node)
     while not queue.isEmpty():
