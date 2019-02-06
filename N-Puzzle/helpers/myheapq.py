@@ -10,7 +10,7 @@ class MyHeapQueue(object):
         if node not in self._visited:
             heapq.heappush(self._data, (node.path_cost, node))
             self._visited.append(node)
-            heapq.heapify(self._data)
+            #heapq.heapify(self._data)
 
     def pop(self):
         return heapq.heappop(self._data)[1]

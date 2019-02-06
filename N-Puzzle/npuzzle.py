@@ -58,7 +58,6 @@ def main():
                     goal_average_best_first.append(best_first_steps)
                     goal_average_a_star.append(a_star_steps)
             else:
-                # todo write a way to get get strings from input from args.
                 if arg.miss:
                     best_first_steps, a_star_steps = search_function(starter_grid, misplaced_square_heuristic, goal_grid)
                     goal_average_best_first.append(best_first_steps)
