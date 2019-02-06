@@ -3,11 +3,6 @@ from helpers.node import Node
 from helpers.myheapq import MyHeapQueue
 import math
 
-goal_grid = three_Grid(['1', '2', '3', '8', 'b', '4', '7', '6', '5'])
-goal_four_grid = four_Grid('1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,b'.split(','))
-print(goal_grid.grid)
-print(goal_four_grid.grid)
-
 def check_goal(grid1, grid2):
     if grid1.grid == grid2.grid:
         return True
@@ -47,12 +42,20 @@ def misplaced_square_heuristic(current, goal):
     return num
 
 
-coordinates = [(0, 0), (0, 1), (0, 2),
-               (1, 0), (1, 1), (1, 2),
-               (2, 0), (2, 1), (2, 2)]
+threegrid_coordinates = [(0, 0), (0, 1), (0, 2),
+                        (1, 0), (1, 1), (1, 2),
+                        (2, 0), (2, 1), (2, 2)]
 
+fourgrid_coordinates = [(0, 0), (0, 1), (0, 2), (0, 3),
+                        (1, 0), (1, 1), (1, 2), (1, 3),
+                        (2, 0), (2, 1), (2, 2), (2, 3),
+                        (3, 0), (3, 1), (3, 2), (3, 3)]
 
 def manhattan_distance_heuristic(current, goal):
+    if isinstance(goal, four_Grid):
+        coordinates = fourgrid_coordinates
+    else:
+        coordinates = threegrid_coordinates
     sum = 0
     for i in range(0, len(current.grid)):
         if current.grid[i] == 'b':
@@ -66,6 +69,10 @@ def manhattan_distance_heuristic(current, goal):
 
 
 def euclidean_distance_heuristic(current, goal):
+    if isinstance(goal, four_Grid):
+        coordinates = fourgrid_coordinates
+    else:
+        coordinates = threegrid_coordinates
     sum = 0
     for i in range(0, len(current.grid)):
         if current.grid[i] == 'b':
@@ -80,9 +87,12 @@ def euclidean_distance_heuristic(current, goal):
     return round(sum)
 
 
-def generate_successors(node, queue, heur_function, astar=False):
+def generate_successors(node, queue, heur_function, goal_grid, astar=False):
     for state in node.action:
-        newGrid = three_Grid(state)
+        if isinstance(goal_grid, four_Grid):
+            newGrid = four_Grid(state)
+        else:
+            newGrid = three_Grid(state)
         depth = node.depth + 1
         if astar:
             heur = heur_function(newGrid, goal_grid) + depth
@@ -95,27 +105,27 @@ def generate_successors(node, queue, heur_function, astar=False):
     return None
 
 
-def best_first_search(start_grid, heur_function):
+def best_first_search(start_grid, heur_function, goal_grid):
     heur = heur_function(start_grid, goal_grid)
     starter_node = Node(start_grid, None, heur, 0)
     queue = MyHeapQueue()
     queue.push(starter_node)
     while not queue.isEmpty():
         curr = queue.pop()
-        goal = generate_successors(curr, queue, heur_function)
+        goal = generate_successors(curr, queue, heur_function, goal_grid)
         if goal:
             return goal
     return None
 
 
-def a_star_search(start_grid, heur_function):
+def a_star_search(start_grid, heur_function, goal_grid):
     heur = heur_function(start_grid, goal_grid)
     starter_node = Node(start_grid, None, heur, 0)
     queue = MyHeapQueue()
     queue.push(starter_node)
     while not queue.isEmpty():
         curr = queue.pop()
-        goal = generate_successors(curr, queue, heur_function, True)
+        goal = generate_successors(curr, queue, heur_function, goal_grid, True)
         if goal:
             return goal
     return None
