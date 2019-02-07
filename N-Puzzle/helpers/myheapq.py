@@ -4,12 +4,13 @@ class MyHeapQueue(object):
     def __init__(self, key=lambda x:x):
         self.key = key
         self._data = []
-        self._visited = []
+        self._visited = set()
 
     def push(self, node):
-        if node not in self._visited:
+        hash_rep = ''.join(node.state.grid)
+        if hash_rep not in self._visited:
             heapq.heappush(self._data, (node.path_cost, node))
-            self._visited.append(node)
+            self._visited.add(hash_rep)
 
     def pop(self):
         return heapq.heappop(self._data)[1]

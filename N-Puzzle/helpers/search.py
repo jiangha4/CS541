@@ -3,6 +3,7 @@ from helpers.node import Node
 from helpers.myheapq import MyHeapQueue
 import math
 
+
 def check_goal(grid1, grid2):
     if grid1.grid == grid2.grid:
         return True

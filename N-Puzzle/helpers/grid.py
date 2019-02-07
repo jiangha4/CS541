@@ -53,6 +53,7 @@ class Grid(object):
         rep = rep + ')'
         return rep
 
+
 class three_Grid(Grid):
     leftEdge = [0, 3, 6]
     rightEdge = [2, 5, 8]
@@ -69,7 +70,7 @@ class three_Grid(Grid):
             self.down(blank_index, nextState)
             successor.append(nextState)
 
-        if blank_index > 3:
+        if blank_index > 2:
             nextState = copy.deepcopy(self.grid)
             self.up(blank_index, nextState)
             successor.append(nextState)
@@ -85,6 +86,7 @@ class three_Grid(Grid):
             successor.append(nextState)
 
         return successor
+
 
 class four_Grid(Grid):
     leftEdge = [0, 4, 8, 12]
@@ -102,7 +104,7 @@ class four_Grid(Grid):
             self.down(blank_index, nextState)
             successor.append(nextState)
 
-        if blank_index > 4:
+        if blank_index > 3:
             nextState = copy.deepcopy(self.grid)
             self.up(blank_index, nextState)
             successor.append(nextState)
@@ -118,6 +120,8 @@ class four_Grid(Grid):
             successor.append(nextState)
 
         return successor
+
+
 if __name__ == '__main__':
     testList = ['1', '2', '3', '4', '5', '6', '7', '8', 'b']
     a = Grid(3, testList)

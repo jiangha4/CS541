@@ -1,4 +1,5 @@
 import argparse
+import time
 from helpers.search import *
 
 
@@ -18,17 +19,23 @@ def argument_parser():
                         help="Solve 15-Puzzle")
     return parser.parse_args()
 
+
 def search_function(starter_grid, heur_function, goal_grid):
     print("Best first Search")
+    start_time = time.time()
     goal = best_first_search(starter_grid, heur_function, goal_grid)
+    best_first_duration = start_time - time.time()
     if goal:
         best_first_steps = backtrack(goal)
 
     print("A* search")
+    start_time = time.time()
     goal = a_star_search(starter_grid, heur_function, goal_grid)
+    a_star_duration = start_time - time.time()
     if goal:
         a_star_steps = backtrack(goal)
     return best_first_steps, a_star_steps
+
 
 def main():
     arg = argument_parser()
