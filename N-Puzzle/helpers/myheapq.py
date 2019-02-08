@@ -8,7 +8,9 @@ class MyHeapQueue(object):
 
     def push(self, node):
         hash_rep = ''.join(node.state.grid)
-        if hash_rep not in self._visited:
+        if hash_rep in self._visited:
+           pass
+        else:
             heapq.heappush(self._data, (node.path_cost, node))
             self._visited.add(hash_rep)
 

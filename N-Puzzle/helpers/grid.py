@@ -39,9 +39,7 @@ class Grid(object):
         self._swap(index, new_index, state)
 
     def _swap(self, x, y, layout):
-        tmp = layout[x]
-        layout[x] = layout[y]
-        layout[y] = tmp
+        layout[x], layout[y] = layout[y], layout[x]
 
     def __eq__(self, other):
         return self.grid == other.grid
