@@ -40,8 +40,9 @@ def search_function(starter_grid, heur_function, goal_grid):
 def main():
     arg = argument_parser()
     if arg.three:
-        starter_grid = three_Grid(list(arg.three))
+        starter_grid = three_Grid((arg.three).split(','))
         goal_grid = three_Grid(['1', '2', '3', '4', '5', '6', '7', '8', 'b'])
+        print(starter_grid)
     if arg.four:
         starter_grid= four_Grid((arg.four).split(','))
         goal_grid = four_Grid('1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,b'.split(','))
