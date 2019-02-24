@@ -14,6 +14,9 @@ class Node(object):
     def __lt__(self, other):
         return self.path_cost < other.path_cost
 
+    def __le__(self, other):
+        return self.path_cost <= other.path_cost
+
     def __repr__(self):
         return str(self.state)
 

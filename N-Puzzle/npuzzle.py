@@ -24,14 +24,16 @@ def search_function(starter_grid, heur_function, goal_grid):
     print("Best first Search")
     start_time = time.time()
     goal = best_first_search(starter_grid, heur_function, goal_grid)
-    best_first_duration = start_time - time.time()
+    best_first_duration = time.time() - start_time
+    print("Search duration: {}".format(best_first_duration))
     if goal:
         best_first_steps = backtrack(goal)
 
     print("A* search")
     start_time = time.time()
     goal = a_star_search(starter_grid, heur_function, goal_grid)
-    a_star_duration = start_time - time.time()
+    a_star_duration = time.time() - start_time
+    print("Search duration: {}".format(a_star_duration))
     if goal:
         a_star_steps = backtrack(goal)
     return best_first_steps, a_star_steps
@@ -46,7 +48,6 @@ def main():
     if arg.four:
         starter_grid= four_Grid((arg.four).split(','))
         goal_grid = four_Grid('1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,b'.split(','))
-        print(starter_grid)
     if check_parity(starter_grid, goal_grid):
         goal_average_best_first = []
         goal_average_a_star = []

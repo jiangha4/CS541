@@ -99,11 +99,10 @@ def generate_successors(node, queue, heur_function, goal_grid, astar=False):
             heur = heur_function(newGrid, goal_grid) + depth
         else:
             heur = heur_function(newGrid, goal_grid)
-        newNode = Node(newGrid, node, int(heur), depth)
+        newNode = Node(newGrid, node, heur, depth)
         if check_goal(newGrid, goal_grid):
             return newNode
         queue.push(newNode)
-    return None
 
 
 def best_first_search(start_grid, heur_function, goal_grid):

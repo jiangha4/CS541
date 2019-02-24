@@ -14,9 +14,12 @@ class individual(object):
         shuffle(indiviual)
         return indiviual
 
+    # fitness is defined as the number of clashes between queens
     def fitness(self):
+        # horizontal clashes
         count = abs(len(self.sequence) - len(set(self.sequence)))
 
+        # diagonal clashes
         for i in range(0, 7):
             for j in range(0, 7):
                 if i != j:

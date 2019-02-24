@@ -1,7 +1,9 @@
 import argparse
+import matplotlib
 from helpers.population import *
 from helpers.selection import *
 from helpers.myheapq import *
+
 
 def argument_parser():
     parser = argparse.ArgumentParser(description='')
@@ -10,11 +12,11 @@ def argument_parser():
     return parser.parse_args()
 
 
-def main():
-    pop, avg_fitness = generate_population(10)
+def reproduce(pop, totalFitness):
     queue = MyHeapQueue()
-    selection_percentage(pop, avg_fitness, queue)
+    selection_percentage(pop, totalFitness, queue)
     new_pop = []
+    total_fitness = 0
     while queue.length > 1:
         parent_one, parent_two = queue.pop()
         seq_one, seq_two = crossover(parent_one, parent_two)
@@ -23,6 +25,8 @@ def main():
         mutations(child_one, child_two)
         new_pop.append(child_one)
         new_pop.append(child_two)
+        total_fitness += child_one.fitness + child_two.fitness
+    return new_pop, total_fitness
 
 
 def check_goal(population):
@@ -31,6 +35,16 @@ def check_goal(population):
             return ind
     return None
 
+
+def main():
+    pop, total_fitness = generate_population(1000)
+    generations = 1000
+    for i in range(0, generations):
+        population, total_fitness = reproduce(pop, total_fitness)
+        goal = check_goal(population)
+        if goal:
+            print(goal, i)
+            return goal
 
 if __name__ == '__main__':
     main()
