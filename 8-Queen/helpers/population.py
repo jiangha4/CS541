@@ -25,7 +25,7 @@ class individual(object):
                 if i != j:
                     x = abs(i-j)
                     y = abs(self.sequence[i] - self.sequence[j])
-                    if x==y:
+                    if x == y:
                         count += 1
         return count
 

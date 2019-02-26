@@ -26,7 +26,7 @@ def reproduce(pop, totalFitness):
         mutations(child_one, child_two)
         new_pop.append(child_one)
         new_pop.append(child_two)
-        total_fitness += child_one.fitness + child_two.fitness
+        total_fitness = total_fitness + child_one.fitness + child_two.fitness
     return new_pop, total_fitness
 
 
@@ -39,18 +39,18 @@ def check_goal(population):
 
 def make_graph(generations, avg_fitness):
     import matplotlib.pyplot as plt
-    xaxis = [x for x in range(0, generations)]
+    xaxis = [x for x in range(0, generations+1)]
     plt.plot(xaxis, avg_fitness)
     plt.ylabel('Average fitness')
     plt.xlabel('Generation')
     plt.show()
 
 def main(args):
-    pop, total_fitness = generate_population(10)
+    population, total_fitness = generate_population(100)
     generations = 1000
-    fitness_per_generation = [total_fitness/len(pop)]
+    fitness_per_generation = [total_fitness/len(population)]
     for i in range(0, generations):
-        population, total_fitness = reproduce(pop, total_fitness)
+        population, total_fitness = reproduce(population, total_fitness)
         if args.graph:
             fitness_per_generation.append(total_fitness/len(population))
         #goal = check_goal(population)
