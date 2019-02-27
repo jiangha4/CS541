@@ -10,13 +10,30 @@ def argument_parser():
                         help='The initial population size')
     parser.add_argument('-g', '--graph', action='store_true',
                         help='Show graphs. Must have matplotlib package installed')
+    parser.add_argument('-b', '--best', action='store_true',
+                        help='Use queue based selection')
     return parser.parse_args()
 
+# roulette based selection
+def reproduce(pop, popNum):
+    new_pop = []
+    selection_percentage(pop)
+    best = get_best_individual(pop)
+    for i in range(0, popNum):
+        parent_one, parent_two = fitness_selection(pop)
+        seq_one, seq_two = crossover(parent_one, parent_two)
+        child_one = individual(sequence=seq_one)
+        child_two = individual(sequence=seq_two)
+        mutations(child_one, child_two)
+        new_pop.append(child_one)
+        new_pop.append(child_two)
+    return new_pop, best
 
-def reproduce(pop, totalFitness):
+# Queued based selection
+def queue_reproduce(pop):
     queue = MyHeapQueue()
-    selection_percentage(pop, totalFitness, queue)
-    best = (queue.peek()).fitness
+    selection_percentage(pop, queue)
+    best = queue.peek()
     new_pop = []
     total_fitness = 0
     while queue.length > 1:
@@ -27,8 +44,7 @@ def reproduce(pop, totalFitness):
         mutations(child_one, child_two)
         new_pop.append(child_one)
         new_pop.append(child_two)
-        total_fitness = total_fitness + child_one.fitness + child_two.fitness
-    return new_pop, total_fitness, best
+    return new_pop, best
 
 
 def check_goal(population):
@@ -48,9 +64,8 @@ def make_graph(generations, avgFitness, bestFitness, genNum):
     axarr[0].set_ylabel('Average fitness')
     axarr[1].set_ylabel('Best fitness')
     plt.xlabel('Generation')
-    plt.title('Generation vs average fitness for initial population size of: {}'.format(genNum))
+    plt.title('Generation vs fitness for initial population size of: {}'.format(genNum))
     plt.show()
-
 
 def main(args):
     if args.population:
@@ -58,20 +73,31 @@ def main(args):
     else:
         gen_num = 1000
     population, total_fitness = generate_population(gen_num)
-    generations = 1000
     fitness_per_generation = [total_fitness/len(population)]
     best_fitness_per_generation = []
-    for i in range(0, generations):
-        population, total_fitness, best_fitness = reproduce(population, total_fitness)
-        if args.graph:
-            fitness_per_generation.append(total_fitness/len(population))
-            best_fitness_per_generation.append(best_fitness)
+    goal = None
+    i = 0
+    while not goal:
+        print("General: {}".format(i))
+        if not args.best:
+            population, best_fitness = reproduce(population, gen_num)
+        else:
+            population, best_fitness = queue_reproduce(population)
         goal = check_goal(population)
-        if goal:
-            print(goal, i)
+        i += 1
 
+        if args.graph:
+            fitness_per_generation.append(get_max_fitness(population)/len(population))
+            best_fitness_per_generation.append(best_fitness.fitness)
+
+        print(best_fitness)
+        if i > 1000:
+            break
+    print("Goal state: {}".format(goal))
+    print("Generations taken: {}".format(i))
     if args.graph:
-        make_graph(generations, fitness_per_generation, best_fitness_per_generation, gen_num)
+        make_graph(i, fitness_per_generation, best_fitness_per_generation, gen_num)
+
 
 if __name__ == '__main__':
     args = argument_parser()

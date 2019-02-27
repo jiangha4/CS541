@@ -21,7 +21,7 @@ class individual(object):
 
         # diagonal clashes
         for i in range(0, 7):
-            for j in range(0, 7):
+            for j in range(i, 7):
                 if i != j:
                     x = abs(i-j)
                     y = abs(self.sequence[i] - self.sequence[j])
@@ -37,6 +37,9 @@ class individual(object):
 
     def __lt__(self, other):
         return self.fitness_percentage < other.fitness_percentage
+
+    def __eq__(self, other):
+        return self.sequence == other.sequence
 
     def __repr__(self):
         return str(self.sequence)

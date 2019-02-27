@@ -1,12 +1,52 @@
 import random
+from operator import attrgetter
+
+def selection_percentage(population, queue=None):
+    total = get_max_fitness(population)
+    if not queue:
+        for ind in population:
+            select_prob = float(ind.fitness/total)
+            ind.set_fitness_percentage(select_prob)
+    else:
+        for ind in population:
+            select_prob = float(ind.fitness / total)
+            ind.set_fitness_percentage(select_prob)
+            queue.push(ind)
+
+def get_best_individual(population):
+    return min(population, key=attrgetter('fitness'))
 
 
-def selection_percentage(population, avgFitness, queue):
-    for ind in population:
-        select_prob = ind.fitness/avgFitness
-        ind.set_fitness_percentage(select_prob)
-        queue.push(ind)
+def get_max_fitness(population):
+    return sum([population[i].fitness for i in range(0, len(population))])
 
+
+def fitness_selection(population):
+    max = get_max_fitness(population)
+    parent_one = None
+    while not parent_one:
+        rand = random.uniform(0, max)
+        target = float(rand/max)
+        potential = [ind for ind in population if ind.fitness_percentage <= target]
+        try:
+            parent_one = potential[random.randint(0, len(potential)-1)]
+        except:
+            parent_one = None
+
+    parent_two = None
+    while not parent_two:
+        rand = random.uniform(0, max)
+        target = float(rand/max)
+        potential = [ind for ind in population if ind.fitness_percentage <= target]
+        try:
+            parent_two = potential[random.randint(0, len(potential)-1)]
+            if parent_one == parent_two:
+                print("parent clash")
+                parent_two = None
+        except:
+            parent_two = None
+
+    return parent_one, parent_two
 
 def crossover(parentOne, parentTwo):
     crossover_index = random.randint(0, 7)
