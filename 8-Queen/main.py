@@ -16,6 +16,7 @@ def argument_parser():
 def reproduce(pop, totalFitness):
     queue = MyHeapQueue()
     selection_percentage(pop, totalFitness, queue)
+    best = (queue.peek()).fitness
     new_pop = []
     total_fitness = 0
     while queue.length > 1:
@@ -27,7 +28,7 @@ def reproduce(pop, totalFitness):
         new_pop.append(child_one)
         new_pop.append(child_two)
         total_fitness = total_fitness + child_one.fitness + child_two.fitness
-    return new_pop, total_fitness
+    return new_pop, total_fitness, best
 
 
 def check_goal(population):
@@ -37,29 +38,40 @@ def check_goal(population):
     return None
 
 
-def make_graph(generations, avg_fitness):
+def make_graph(generations, avgFitness, bestFitness, genNum):
     import matplotlib.pyplot as plt
-    xaxis = [x for x in range(0, generations+1)]
-    plt.plot(xaxis, avg_fitness)
-    plt.ylabel('Average fitness')
+
+    f, axarr = plt.subplots(2, sharex=True)
+    xaxis = [x for x in range(0, generations)]
+    axarr[0].plot(xaxis, avgFitness[0:-1])
+    axarr[1].plot(xaxis, bestFitness)
+    axarr[0].set_ylabel('Average fitness')
+    axarr[1].set_ylabel('Best fitness')
     plt.xlabel('Generation')
+    plt.title('Generation vs average fitness for initial population size of: {}'.format(genNum))
     plt.show()
 
+
 def main(args):
-    population, total_fitness = generate_population(100)
+    if args.population:
+        gen_num = args.population
+    else:
+        gen_num = 1000
+    population, total_fitness = generate_population(gen_num)
     generations = 1000
     fitness_per_generation = [total_fitness/len(population)]
+    best_fitness_per_generation = []
     for i in range(0, generations):
-        population, total_fitness = reproduce(population, total_fitness)
+        population, total_fitness, best_fitness = reproduce(population, total_fitness)
         if args.graph:
             fitness_per_generation.append(total_fitness/len(population))
-        #goal = check_goal(population)
-        #if goal:
-        #    print(goal, i)
-        #    return goal
+            best_fitness_per_generation.append(best_fitness)
+        goal = check_goal(population)
+        if goal:
+            print(goal, i)
 
     if args.graph:
-        make_graph(generations, fitness_per_generation)
+        make_graph(generations, fitness_per_generation, best_fitness_per_generation, gen_num)
 
 if __name__ == '__main__':
     args = argument_parser()
