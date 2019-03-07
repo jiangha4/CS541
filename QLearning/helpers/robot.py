@@ -1,0 +1,2 @@
+class robot(object):
+    pass
