@@ -9,7 +9,6 @@ class square(object):
     def __init__(self, id, can):
         self.contains_can = can
         self.id = id
-        self.is_wall = self.check_if_wall()
 
     def check_if_wall(self):
         if self.id in square.walls:
@@ -32,6 +31,6 @@ def create_can():
 
 def make_grid():
     robot_world = []
-    for i in range(0, 10):
+    for i in range(0, 100):
         robot_world.append(square(i, create_can()))
     return robot_world
